@@ -22,7 +22,7 @@ architecture Behavior of TB_COUNTER is
 			i_RST			:	in	STD_LOGIC;
 			i_START		:	in	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 			i_TIME		:	in	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-			i_ADDR		:	in	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
+			i_ADDR		:	in	STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);
 			
 			o_DONE		:	out STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0)
 		);
@@ -65,10 +65,10 @@ architecture Behavior of TB_COUNTER is
 		WAIT FOR 100 NS;
 		w_RST <= '0';
 		WAIT FOR 100 NS;
-		w_ADDR <= "0000000000011001"; -- Endere�o pra escrever em i_TIME
+		w_ADDR <= "000011001"; -- Endere�o pra escrever em i_TIME
 		w_TIME  <= "0000000000000111";
 		WAIT FOR 50 NS;
-		w_ADDR <= "0000000000011010"; -- Endere�o pra escrever em i_START
+		w_ADDR <= "000011010"; -- Endere�o pra escrever em i_START
 		w_START <= "0000000000000001";
 		WAIT FOR 50 NS;
 		w_START <= (OTHERS => 'U');	

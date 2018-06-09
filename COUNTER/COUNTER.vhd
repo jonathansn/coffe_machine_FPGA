@@ -19,7 +19,7 @@ entity COUNTER is
 		i_RST			:	in		STD_LOGIC;
 		i_START		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 		i_TIME		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-		i_ADDR		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
+		i_ADDR		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);
 		
 		o_DONE		:	out	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0)
 	);
