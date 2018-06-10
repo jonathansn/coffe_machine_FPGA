@@ -12,15 +12,14 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 entity COUNTER is
 	generic (
 				p_DATA_WIDTH	: INTEGER := 16;
+				p_SECOUND		: STD_LOGIC_VECTOR := "10111110101111000010000000";
 				p_SECOUND_WIDTH : INTEGER := 4
     );
 	port(
 		i_CLK			:	in		STD_LOGIC;
 		i_RST			:	in		STD_LOGIC;
 		i_START		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-		i_TIME		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-		i_ADDR		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);
-		
+		i_TIME		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);		
 		o_DONE		:	out	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0)
 	);
 end COUNTER;
@@ -62,9 +61,7 @@ architecture Behavior of COUNTER is
 		
 		if(rising_edge(i_CLK)) then
 		
-			if(i_ADDR = "000011001") then
 				w_TIME <= i_TIME;
-			end if;
 			
 		end if;
 		
@@ -90,14 +87,11 @@ architecture Behavior of COUNTER is
 				
 					--	BEGIN IDLE
 					when st_IDLE =>
-					
-					  if(i_ADDR = "000011010") then					
-						  if(w_Q = "0000000000000001")	then
-							 w_COUNT  	<=	(OTHERS => '0');
-							 w_SECOUND 	<= (OTHERS => '0');
-							 w_CE			<=	'0';					--	FF Clock Enanle
-							 w_STATE 		<= st_COUNT;
-							 end if;					
+						if(w_Q = "0000000000000001")	then
+							w_COUNT  	<=	(OTHERS => '0');
+							w_SECOUND 	<= (OTHERS => '0');
+							w_CE			<=	'0';					--	FF Clock Enanle
+							w_STATE 		<= st_COUNT;				
 						else
 							w_CLR		<=	'0';						-- FF input 0 to R
 							w_CE		<=	'1';						-- FF Clock Enable
@@ -107,7 +101,7 @@ architecture Behavior of COUNTER is
 					
 					--	BEGIN COUNT
 					when st_COUNT =>
-						if(w_COUNT = "111") then
+						if(w_COUNT = p_SECOUND) then
 							w_SECOUND 	<= w_SECOUND + 1;
 							w_COUNT 		<= (OTHERS => '0');
 							w_STATE	<= st_TIMER;

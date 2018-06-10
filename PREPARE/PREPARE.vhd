@@ -11,6 +11,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 entity PREPARE is
 	generic(
 		p_DATA_WIDTH	: INTEGER := 16;
+		p_SECOUND		: STD_LOGIC_VECTOR := "10111110101111000010000000";
 		p_SECOUND_WIDTH : INTEGER := 4
     );
 	port(
@@ -18,13 +19,8 @@ entity PREPARE is
 		i_CLK			:	in		STD_LOGIC;
 		i_RST			:	in		STD_LOGIC;
 		i_ADDR		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);
-		o_DATA		:	out	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-		-- COUNTER
-		i_START		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-		i_TIME		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-		-- CHOICES
-		i_D   		: 	in 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-		i_LE  		: 	in 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0)
+		i_DATA		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
+		o_DATA		:	out		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0)
 	);
 end PREPARE;
 
@@ -36,14 +32,14 @@ architecture Behavior of PREPARE is
 	component COUNTER is
 		generic (
 			p_DATA_WIDTH	: 	INTEGER := 16;
+			p_SECOUND		: STD_LOGIC_VECTOR := "10111110101111000010000000";
 			p_SECOUND_WIDTH : INTEGER := 4
 		 );
 		port(
 			i_CLK		:	in		STD_LOGIC;
 			i_RST		:	in		STD_LOGIC;
 			i_START	:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-			i_TIME	:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-			i_ADDR	:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);			
+			i_TIME	:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);		
 			o_DONE	:	out	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0)
 		);
 	end component;
@@ -55,7 +51,6 @@ architecture Behavior of PREPARE is
 		);
 		port(
 			i_D   	: 	in 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-			i_ADDR	:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);
 			i_LE  	: 	in 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 			i_CLR 	: 	in 	STD_LOGIC;
 			i_CLK 	: 	in 	STD_LOGIC;
@@ -65,7 +60,7 @@ architecture Behavior of PREPARE is
 	
 	-- MUX2x1
 	component MUX2x1 is
-		generic (
+		generic(
 			p_DATA_WIDTH	: 	INTEGER := 16
 		);
 		port (
@@ -76,12 +71,23 @@ architecture Behavior of PREPARE is
 		);
 	end component;
 	
+	-- DEMUX1x4
+	component DEMUX1x4 is
+		generic(
+			p_DATA_WIDTH	: INTEGER := 16
+		);
+		port (
+			i_SEL : in  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-8) downto 0);
+			i_X 	: in  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
+			o_Y0 	: out  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
+			o_Y1 	: out  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
+			o_Y2 	: out  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
+			o_Y3 	: out  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0)
+		);
+	end component;
+	
 ------------------------------ SIGNALS -------------------------------
 	
-	-- GENERAL
-	signal w_i_CLK		:	STD_LOGIC;
-	signal w_i_RST		:	STD_LOGIC;
-	signal w_i_ADDR	:	STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);
 	-- COUNTER		
 	signal w_i_START	:	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 	signal w_i_TIME	:	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);		
@@ -99,14 +105,14 @@ architecture Behavior of PREPARE is
 	U_COUNTER : COUNTER
 	generic map(
 		p_DATA_WIDTH 		=>		p_DATA_WIDTH,
+		p_SECOUND 			=>		p_SECOUND,
 		p_SECOUND_WIDTH 	=>		p_SECOUND_WIDTH
 	)
 	port map(
 		i_CLK					=>		i_CLK,
 		i_RST					=>		i_RST,
-		i_START				=>		i_START,
-		i_TIME				=>		i_TIME,
-		i_ADDR				=>		i_ADDR,
+		i_START				=>		w_i_START,
+		i_TIME				=>		w_i_TIME,
 		o_DONE				=>		w_o_DONE
 	);
 	
@@ -118,9 +124,8 @@ architecture Behavior of PREPARE is
 	port map(
 		i_CLK					=>		i_CLK,
 		i_CLR					=>		i_RST,
-		i_D					=>		i_D,
-		i_ADDR				=>		i_ADDR,
-		i_LE					=>		i_LE,
+		i_D					=>		w_i_D,
+		i_LE					=>		w_i_LE,
 		o_Q					=>		w_o_Q
 	);
 
@@ -135,5 +140,19 @@ architecture Behavior of PREPARE is
 		i_X1					=>		w_o_Q,
 		o_Y					=>		o_DATA
 	);
+	
+	-- DEMUX1x4
+	U_DEMUX1x4 : DEMUX1x4
+		generic map(
+			p_DATA_WIDTH 	=>		p_DATA_WIDTH
+		)
+		port map(
+			i_SEL				=>		i_ADDR,
+			i_X				=>		i_DATA,
+			o_Y0				=>		w_i_START,	-- i_START
+			o_Y1				=>		w_i_TIME,	--	i_TIME
+			o_Y2				=>		w_i_D,		--	i_D
+			o_Y3				=>		w_i_LE		--	i_LE
+		);
 		
 end Behavior;
