@@ -17,10 +17,10 @@ entity PREPARE is
 		-- GENERAL
 		i_CLK			:	in		STD_LOGIC;
 		i_RST			:	in		STD_LOGIC;
+		i_ADDR		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);
 		-- COUNTER
 		i_START		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-		i_TIME		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-		i_ADDR		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);		
+		i_TIME		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);		
 		o_DONE		:	out	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 		-- CHOICES
 		i_D   		: 	in 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
@@ -56,6 +56,7 @@ architecture Behavior of PREPARE is
 		);
 		port(
 			i_D   	: 	in 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
+			i_ADDR	:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);
 			i_LE  	: 	in 	STD_LOGIC;
 			i_CLR 	: 	in 	STD_LOGIC;
 			i_CLK 	: 	in 	STD_LOGIC;
@@ -68,10 +69,10 @@ architecture Behavior of PREPARE is
 	-- GENERAL
 	signal w_i_CLK		:	STD_LOGIC;
 	signal w_i_RST		:	STD_LOGIC;
+	signal w_i_ADDR	:	STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);
 	-- COUNTER		
 	signal w_i_START	:	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-	signal w_i_TIME	:	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-	signal w_i_ADDR	:	STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);		
+	signal w_i_TIME	:	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);		
 	signal w_o_DONE	:	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 	-- CHOICES
 	signal w_i_D   	: 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
@@ -106,6 +107,7 @@ architecture Behavior of PREPARE is
 		i_CLK					=>		i_CLK,
 		i_CLR					=>		i_RST,
 		i_D					=>		i_D,
+		i_ADDR				=>		i_ADDR,
 		i_LE					=>		i_LE,
 		o_Q					=>		o_Q
 	);

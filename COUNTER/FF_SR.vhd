@@ -28,7 +28,7 @@ architecture Behavioral of FF_SR is
 					  if(i_PRE = '1') then
 							o_Q <= "0000000000000001";
 					  else 
-							if (i_CE = '1' and falling_edge(i_CLK)) then 
+							if (i_CE = '1' and rising_edge(i_CLK)) then 
 								o_Q <= i_D;       
 						  end if;
 					 end if;

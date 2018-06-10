@@ -62,7 +62,7 @@ architecture Behavior of COUNTER is
 		
 		if(rising_edge(i_CLK)) then
 		
-			if(i_ADDR = "0000000000011001") then
+			if(i_ADDR = "000011001") then
 				w_TIME <= i_TIME;
 			end if;
 			
@@ -91,7 +91,7 @@ architecture Behavior of COUNTER is
 					--	BEGIN IDLE
 					when st_IDLE =>
 					
-					  if(i_ADDR = "0000000000011010") then					
+					  if(i_ADDR = "000011010") then					
 						  if(w_Q = "0000000000000001")	then
 							 w_COUNT  	<=	(OTHERS => '0');
 							 w_SECOUND 	<= (OTHERS => '0');
