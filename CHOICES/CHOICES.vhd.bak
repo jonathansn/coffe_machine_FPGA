@@ -29,7 +29,7 @@ begin
 		elsif rising_edge(i_CLK) then
 			
 			if(i_ADDR = "000011011") then
-				if(i_LE = "0000000000000001") then
+				if(i_LE = '1') then
                 o_Q <= i_D;
             end if;
 			end if;

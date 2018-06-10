@@ -18,14 +18,13 @@ entity PREPARE is
 		i_CLK			:	in		STD_LOGIC;
 		i_RST			:	in		STD_LOGIC;
 		i_ADDR		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);
+		o_DATA		:	out	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 		-- COUNTER
 		i_START		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-		i_TIME		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);		
-		o_DONE		:	out	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
+		i_TIME		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 		-- CHOICES
 		i_D   		: 	in 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-		o_Q   		: 	out 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-		i_LE  		: 	in 	STD_LOGIC
+		i_LE  		: 	in 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0)
 	);
 end PREPARE;
 
@@ -36,7 +35,7 @@ architecture Behavior of PREPARE is
 	-- COUNTER
 	component COUNTER is
 		generic (
-			p_DATA_WIDTH	: INTEGER := 16;
+			p_DATA_WIDTH	: 	INTEGER := 16;
 			p_SECOUND_WIDTH : INTEGER := 4
 		 );
 		port(
@@ -52,15 +51,28 @@ architecture Behavior of PREPARE is
 	-- CHOICES
 	component CHOICES is
 		generic (
-			p_DATA_WIDTH	: INTEGER := 16
+			p_DATA_WIDTH	: 	INTEGER := 16
 		);
 		port(
 			i_D   	: 	in 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 			i_ADDR	:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);
-			i_LE  	: 	in 	STD_LOGIC;
+			i_LE  	: 	in 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 			i_CLR 	: 	in 	STD_LOGIC;
 			i_CLK 	: 	in 	STD_LOGIC;
 			o_Q   	: 	out 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0)
+		);
+	end component;
+	
+	-- MUX
+	component MUX is
+		generic (
+			p_DATA_WIDTH	: 	INTEGER := 16
+		);
+		port (
+			i_SEL 	: in  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-8) downto 0);
+			i_X0 		: in  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
+			i_X1 		: in  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
+			o_Y 		: out  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0)
 		);
 	end component;
 	
@@ -76,7 +88,7 @@ architecture Behavior of PREPARE is
 	signal w_o_DONE	:	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 	-- CHOICES
 	signal w_i_D   	: 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-	signal w_i_LE  	:	STD_LOGIC;
+	signal w_i_LE  	:	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 	signal w_o_Q   	:	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 	
 	begin
@@ -95,7 +107,7 @@ architecture Behavior of PREPARE is
 		i_START				=>		i_START,
 		i_TIME				=>		i_TIME,
 		i_ADDR				=>		i_ADDR,
-		o_DONE				=>		o_DONE
+		o_DONE				=>		w_o_DONE
 	);
 	
 	-- CHOICES
@@ -109,7 +121,19 @@ architecture Behavior of PREPARE is
 		i_D					=>		i_D,
 		i_ADDR				=>		i_ADDR,
 		i_LE					=>		i_LE,
-		o_Q					=>		o_Q
+		o_Q					=>		w_o_Q
+	);
+	
+	-- MUX
+	U_MUX : MUX
+	generic map(
+		p_DATA_WIDTH 		=>		p_DATA_WIDTH
+	)
+	port map(
+		i_SEL					=>		i_ADDR,
+		i_X0					=>		w_o_DONE,
+		i_X1					=>		w_o_Q,
+		o_Y					=>		o_DATA
 	);
 		
 end Behavior;
