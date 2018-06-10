@@ -86,7 +86,7 @@ architecture Behavioral of uPD is
 ------------------------------ COMPONENT -------------------------------
 
 	component PREPARE is
-		generic (
+		generic(
 			p_DATA_WIDTH	: INTEGER := 16;
 			p_SECOUND_WIDTH : INTEGER := 4
 		 );
@@ -95,14 +95,13 @@ architecture Behavioral of uPD is
 			i_CLK			:	in		STD_LOGIC;
 			i_RST			:	in		STD_LOGIC;
 			i_ADDR		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);
+			o_DATA		:	out	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 			-- COUNTER
 			i_START		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-			i_TIME		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);	
-			o_DONE		:	out	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
+			i_TIME		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 			-- CHOICES
 			i_D   		: 	in 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-			o_Q   		: 	out 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-			i_LE  		: 	in 	STD_LOGIC
+			i_LE  		: 	in 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0)
 		);
 	end component;
 
@@ -198,22 +197,21 @@ begin
 
 	U_PREPARE : PREPARE
 		generic map(
-			p_DATA_WIDTH		=>		p_DATA_WIDTH,
+			p_DATA_WIDTH		=> 	p_DATA_WIDTH,
 			p_SECOUND_WIDTH 	=> 	p_SECOUND_WIDTH
 		 )
 		port map(
 			-- GENERAL
-			i_CLK			=>		w_CLK,
-			i_RST			=>		w_RST,
-			i_ADDR		=>		w_o_ADDR_IO,
+			i_CLK       	=> 	w_CLK,
+			i_RST       	=> 	w_RST,
+			i_ADDR       	=> 	w_o_ADDR_IO,
+			o_DATA       	=> 	w_i_DATA_IO,
 			-- COUNTER
-			i_START		=>		w_o_DATA_IO,
-			i_TIME		=>		w_o_DATA_IO,			
-			o_DONE		=>		w_i_DATA_IO,
+			i_START       	=> 	w_DATA_ROM,
+			i_TIME       	=> 	w_DATA_ROM,
 			-- CHOICES
-			i_D   		=>		w_o_DATA_IO,
-			o_Q   		=>		w_i_D,
-			i_LE  		=>		w_o_DATA_IO
+			i_D       		=> 	w_DATA_ROM,
+			i_LE       		=> 	w_DATA_ROM
 		);
 
 ---------------------------- END INSTANCE -----------------------------

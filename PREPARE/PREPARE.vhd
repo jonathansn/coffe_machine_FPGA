@@ -9,7 +9,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 ------------------------------ ENTITY -------------------------------
 
 entity PREPARE is
-	generic (
+	generic(
 		p_DATA_WIDTH	: INTEGER := 16;
 		p_SECOUND_WIDTH : INTEGER := 4
     );
@@ -63,8 +63,8 @@ architecture Behavior of PREPARE is
 		);
 	end component;
 	
-	-- MUX
-	component MUX is
+	-- MUX2x1
+	component MUX2x1 is
 		generic (
 			p_DATA_WIDTH	: 	INTEGER := 16
 		);
@@ -123,9 +123,9 @@ architecture Behavior of PREPARE is
 		i_LE					=>		i_LE,
 		o_Q					=>		w_o_Q
 	);
-	
-	-- MUX
-	U_MUX : MUX
+
+	-- MUX2x1
+	U_MUX2x1 : MUX2x1
 	generic map(
 		p_DATA_WIDTH 		=>		p_DATA_WIDTH
 	)

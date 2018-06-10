@@ -1,11 +1,12 @@
 -- ADDR 10 => i_X0
 -- ADDR 11 => i_X1
 -- DEFAULT => i_X0
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
-entity MUX is
+entity MUX2x1 is
 	generic (
 		p_DATA_WIDTH	: INTEGER := 16
 	);
@@ -15,18 +16,18 @@ entity MUX is
       i_X1 	: in  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
       o_Y 	: out  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0)
 	);
-end MUX;
+end MUX2x1;
 
-architecture Behavioral of MUX is
+architecture Behavioral of MUX2x1 is
 
 	begin
 
-	MUX : process(i_SEL, i_X0, i_X1)
+	MUX2x1 : process(i_SEL, i_X0, i_X1)
 		begin
 		
-			if (i_SEL = "0000000000001010") then
+			if (i_SEL = "000001010") then
 				o_Y <= i_X0;
-			elsif (i_SEL = "0000000000001010") then
+			elsif (i_SEL = "000001010") then
 				o_Y <= i_X1;
 			else
 				o_Y <= i_X0;
