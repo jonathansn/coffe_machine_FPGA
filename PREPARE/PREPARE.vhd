@@ -20,7 +20,12 @@ entity PREPARE is
 		i_RST			:	in		STD_LOGIC;
 		i_ADDR		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);
 		i_DATA		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-		o_DATA		:	out		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0)
+		o_DATA		:	out		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
+		
+		o_DIS0		:	out		STD_LOGIC_VECTOR(6 downto 0);
+		o_DIS1		:	out		STD_LOGIC_VECTOR(6 downto 0);
+		o_DIS2		:	out		STD_LOGIC_VECTOR(6 downto 0);
+		o_DIS3		:	out		STD_LOGIC_VECTOR(6 downto 0)
 	);
 end PREPARE;
 
@@ -82,7 +87,24 @@ architecture Behavior of PREPARE is
 			o_Y0 	: out  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
 			o_Y1 	: out  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
 			o_Y2 	: out  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
-			o_Y3 	: out  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0)
+			o_Y3 	: out  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
+			o_Y4 	: out  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
+			o_Y5 	: out  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
+			o_Y6 	: out  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
+			o_Y7 	: out  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0)
+		);
+	end component;
+	
+	-- BCD
+	component BCD is
+		generic(
+			p_DATA_WIDTH	: INTEGER := 16
+		);
+		port(
+			i_CLK			:	in		STD_LOGIC;
+			i_RST			:	in		STD_LOGIC;
+			i_BIN			:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
+			o_DEC			:	out	STD_LOGIC_VECTOR(6 downto 0)
 		);
 	end component;
 	
@@ -96,6 +118,11 @@ architecture Behavior of PREPARE is
 	signal w_i_D   	: 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 	signal w_i_LE  	:	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 	signal w_o_Q   	:	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
+	-- BCD
+	signal w_i_BIN0   : 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
+	signal w_i_BIN1  	: 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
+	signal w_i_BIN2  	: 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
+	signal w_i_BIN3  	: 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 	
 	begin
 	
@@ -143,16 +170,68 @@ architecture Behavior of PREPARE is
 	
 	-- DEMUX1x4
 	U_DEMUX1x4 : DEMUX1x4
-		generic map(
-			p_DATA_WIDTH 	=>		p_DATA_WIDTH
-		)
-		port map(
-			i_SEL				=>		i_ADDR,
-			i_X				=>		i_DATA,
-			o_Y0				=>		w_i_START,	-- i_START
-			o_Y1				=>		w_i_TIME,	--	i_TIME
-			o_Y2				=>		w_i_D,		--	i_D
-			o_Y3				=>		w_i_LE		--	i_LE
-		);
+	generic map(
+		p_DATA_WIDTH 	=>		p_DATA_WIDTH
+	)
+	port map(
+		i_SEL				=>		i_ADDR,
+		i_X				=>		i_DATA,
+		o_Y0				=>		w_i_START,	-- i_START
+		o_Y1				=>		w_i_TIME,	--	i_TIME
+		o_Y2				=>		w_i_D,		--	i_D
+		o_Y3				=>		w_i_LE,		--	i_LE
+		o_Y4				=>		w_i_BIN0,	--	i_BIN0
+		o_Y5				=>		w_i_BIN1,	--	i_BIN1
+		o_Y6				=>		w_i_BIN2,	--	i_BIN2
+		o_Y7				=>		w_i_BIN3		--	i_BIN3
+	);
+	
+	-- BCD0
+	U_BCD0 : BCD
+	generic map(
+		p_DATA_WIDTH 	=>		p_DATA_WIDTH
+	)
+	port map(
+		i_CLK				=>		i_CLK,
+		i_RST				=>		i_RST,
+		i_BIN				=>		w_i_BIN0,
+		o_DEC				=>		o_DIS0
+	);
+	
+	-- BCD1
+	U_BCD1 : BCD
+	generic map(
+		p_DATA_WIDTH 	=>		p_DATA_WIDTH
+	)
+	port map(
+		i_CLK				=>		i_CLK,
+		i_RST				=>		i_RST,
+		i_BIN				=>		w_i_BIN1,
+		o_DEC				=>		o_DIS1
+	);
+	
+	-- BCD2
+	U_BCD2 : BCD
+	generic map(
+		p_DATA_WIDTH 	=>		p_DATA_WIDTH
+	)
+	port map(
+		i_CLK				=>		i_CLK,
+		i_RST				=>		i_RST,
+		i_BIN				=>		w_i_BIN2,
+		o_DEC				=>		o_DIS2
+	);
+	
+	-- BCD3
+	U_BCD3 : BCD
+	generic map(
+		p_DATA_WIDTH 	=>		p_DATA_WIDTH
+	)
+	port map(
+		i_CLK				=>		i_CLK,
+		i_RST				=>		i_RST,
+		i_BIN				=>		w_i_BIN3,
+		o_DEC				=>		o_DIS3
+	);
 		
 end Behavior;

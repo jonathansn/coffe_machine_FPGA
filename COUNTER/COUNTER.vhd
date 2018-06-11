@@ -1,9 +1,7 @@
 --
---	Title: 	Counter 4 Bit
+--	Title: 	Counter
 --	Author:	Jonathan Nascimento
 --
--- i_ADDR = "00011001" or 25 => i_TIME
--- i_ADDR = "00011010" or 26 => i_START
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -19,7 +17,7 @@ entity COUNTER is
 		i_CLK			:	in		STD_LOGIC;
 		i_RST			:	in		STD_LOGIC;
 		i_START		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-		i_TIME		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);		
+		i_TIME		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 		o_DONE		:	out	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0)
 	);
 end COUNTER;
@@ -28,12 +26,12 @@ architecture Behavior of COUNTER is
 
 	component FF_SR is
 		Port (
-			o_Q 	: out STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);		-- Data output
-			i_CLK : in 	STD_LOGIC;      											-- Clock input
-			i_CE 	: in	STD_LOGIC;   												-- Clock enable input
-			i_CLR : in 	STD_LOGIC;  												-- Asyn clear input
-			i_D 	: in  STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);    -- Data input
-			i_PRE : in 	STD_LOGIC   	 											-- Asyn set input
+			o_Q 	: out STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);			-- Data output
+			i_CLK : in 	STD_LOGIC;      												-- Clock input
+			i_CE 	: in	STD_LOGIC;   													-- Clock enable input
+			i_CLR : in 	STD_LOGIC;  													-- Asyn clear input
+			i_D 	: in  STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);    	-- Data input
+			i_PRE : in 	STD_LOGIC   	 												-- Asyn set input
 		);
 	end component;
 
@@ -43,15 +41,15 @@ architecture Behavior of COUNTER is
 	attribute syn_encoding	of	ST	:	type is "safe";
 	
 	-- SIGNALS
-	signal w_CLR		:	STD_LOGIC;	-- Clear Flip Flop
-	signal w_Q			:	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);	-- Data output Flip Flop
-	signal w_CE			:	STD_LOGIC;	-- Enable Flip Flop
-	signal w_PRE		:	STD_LOGIC;	--	Preset Flip Flop
+	signal w_CLR		:	STD_LOGIC;													-- Clear Flip Flop
+	signal w_Q			:	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);		-- Data output Flip Flop
+	signal w_CE			:	STD_LOGIC;													-- Enable Flip Flop
+	signal w_PRE		:	STD_LOGIC;													--	Preset Flip Flop
 	
 	signal w_STATE		: 	ST;
-	signal w_TIME		:	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);			--	Time input data
-	signal w_COUNT		:	STD_LOGIC_VECTOR(25 downto 0);							--	count 0 to 10111110101111000010000000 (1 secound in 50 MHz)
-	signal w_SECOUND	:	STD_LOGIC_VECTOR((p_SECOUND_WIDTH-1) downto 0);		-- 0 to 1111 (0 to 15 secounds)
+	signal w_TIME		:	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);		--	Time input data
+	signal w_COUNT		:	STD_LOGIC_VECTOR(25 downto 0);						--	count 0 to 10111110101111000010000000 (1 secound in 50 MHz)
+	signal w_SECOUND	:	STD_LOGIC_VECTOR((p_SECOUND_WIDTH-1) downto 0);	-- 0 to 1111 (0 to 15 secounds)
 	
 	begin
 	
@@ -91,7 +89,7 @@ architecture Behavior of COUNTER is
 							w_COUNT  	<=	(OTHERS => '0');
 							w_SECOUND 	<= (OTHERS => '0');
 							w_CE			<=	'0';					--	FF Clock Enanle
-							w_STATE 		<= st_COUNT;				
+							w_STATE 		<= st_COUNT;
 						else
 							w_CLR		<=	'0';						-- FF input 0 to R
 							w_CE		<=	'1';						-- FF Clock Enable
