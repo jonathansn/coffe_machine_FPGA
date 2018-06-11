@@ -1,7 +1,8 @@
 --
---	Title: 	Counter 4 Bit
+--	Title: 	Prepare
 --	Author:	Jonathan Nascimento
 --
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
@@ -21,7 +22,7 @@ entity PREPARE is
 		i_ADDR		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);
 		i_DATA		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 		o_DATA		:	out		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-		
+		-- DISPLAY
 		o_DIS0		:	out		STD_LOGIC_VECTOR(6 downto 0);
 		o_DIS1		:	out		STD_LOGIC_VECTOR(6 downto 0);
 		o_DIS2		:	out		STD_LOGIC_VECTOR(6 downto 0);

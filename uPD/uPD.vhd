@@ -18,11 +18,17 @@ entity uPD is
 				o_WR_IO    	: out STD_LOGIC;
 				o_RD_IO		: out STD_LOGIC;				
 				i_DATA_IO	: in  STD_LOGIC_VECTOR((p_DATA_WIDTH-1) DOWNTO 0);
-				o_DATA_IO	: out STD_LOGIC_VECTOR((p_DATA_WIDTH-1) DOWNTO 0);
-				o_ADDR_IO   : out STD_LOGIC_VECTOR((p_DATA_WIDTH-8) DOWNTO 0);
+				--o_DATA_IO	: out STD_LOGIC_VECTOR((p_DATA_WIDTH-1) DOWNTO 0);
+				--o_ADDR_IO   : out STD_LOGIC_VECTOR((p_DATA_WIDTH-8) DOWNTO 0);
 
 				i_INT		: in  STD_LOGIC_VECTOR(5 DOWNTO 0);
-				o_BUSY      : out STD_LOGIC							
+				o_BUSY      : out STD_LOGIC;
+
+			-- DISPLAY OUTPUT
+			o_DIS0		:	out		STD_LOGIC_VECTOR(6 downto 0);
+			o_DIS1		:	out		STD_LOGIC_VECTOR(6 downto 0);
+			o_DIS2		:	out		STD_LOGIC_VECTOR(6 downto 0);
+			o_DIS3		:	out		STD_LOGIC_VECTOR(6 downto 0)				
     );
 end uPD;
 
@@ -94,11 +100,16 @@ architecture Behavioral of uPD is
 		 );
 		port(
 			-- GENERAL
-			i_CLK			:	in		STD_LOGIC;
-			i_RST			:	in		STD_LOGIC;
-			i_ADDR		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);
-			i_DATA		:	in		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-			o_DATA		:	out	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0)
+			i_CLK			:	in			STD_LOGIC;
+			i_RST			:	in			STD_LOGIC;
+			i_ADDR		:	in			STD_LOGIC_VECTOR((p_DATA_WIDTH-8) downto 0);
+			i_DATA		:	in			STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
+			o_DATA		:	out		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
+			-- DISPLAY
+			o_DIS0		:	out		STD_LOGIC_VECTOR(6 downto 0);
+			o_DIS1		:	out		STD_LOGIC_VECTOR(6 downto 0);
+			o_DIS2		:	out		STD_LOGIC_VECTOR(6 downto 0);
+			o_DIS3		:	out		STD_LOGIC_VECTOR(6 downto 0)
 		);
 	end component;
 
@@ -204,7 +215,12 @@ begin
 			i_RST       	=> 	w_RST,
 			i_ADDR       	=> 	w_o_ADDR_IO,
 			i_DATA       	=> 	w_o_DATA_IO,
-			o_DATA       	=> 	w_i_DATA_IO
+			o_DATA       	=> 	w_i_DATA_IO,
+			-- DISPLAY
+			o_DIS0       	=> 	o_DIS0,
+			o_DIS1       	=> 	o_DIS1,
+			o_DIS2      	=> 	o_DIS2,
+			o_DIS3       	=> 	o_DIS3
 		);
 
 ---------------------------- END INSTANCE -----------------------------
