@@ -13,7 +13,7 @@ entity MUX2x1 is
 	port (
 		i_SEL : in  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-8) downto 0);
       i_X0 	: in  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
-      i_X1 	: in  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
+		i_X1 	: in  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
       o_Y 	: out  	STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0)
 	);
 end MUX2x1;

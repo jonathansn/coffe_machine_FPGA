@@ -1,0 +1,4 @@
+h2 button0 rst
+g3 button1 load
+f1 button2 prepare
+sw0 - sw5 choice0 - choice 5

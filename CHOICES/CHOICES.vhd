@@ -7,15 +7,21 @@ entity CHOICES is
 				p_DATA_WIDTH	: INTEGER := 16
     );
 	port(
-		 i_CLK 	:	in 	STD_LOGIC; 													-- Clock
-		 i_CLR 	:	in 	STD_LOGIC; 													-- Async. clear
-		 i_D   	: 	in 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);		-- Input
-		 i_LE  	: 	in 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);		-- Load enable
-		 o_Q   	: 	out 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0) 		-- Output
+		 i_CLK 		:	in 	STD_LOGIC; 													-- Clock
+		 i_CLR 		:	in 	STD_LOGIC; 													-- Async. clear
+		 i_PREPARE 	:	in		STD_LOGIC;													-- Button Prepare
+		 i_LOAD		:	in		STD_LOGIC;													-- Button Load
+		 i_D   		: 	in 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);		-- Input Switches
+		 i_LE  		: 	in 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);		-- Load enable
+		 o_Q   		: 	out 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);		-- Output Switches
+		 o_PREPARE	:	out	STD_LOGIC;													-- Interrupt Prepare
+		 o_LOAD		:	out	STD_LOGIC													-- Interrupt Load
 	);
 end CHOICES;
 
 architecture Behavior of CHOICES is
+
+	signal w_PREPARE	:	STD_LOGIC;
 
 begin
 
@@ -27,8 +33,16 @@ begin
 		elsif rising_edge(i_CLK) then
 		
 			if(i_LE = "0000000000000001") then
+			
+				if(i_LOAD = '1') then
+					o_LOAD <= '1';
+				elsif(i_PREPARE = '1') then
+					o_PREPARE <= '1';
+				end if;
+				
                o_Q <= i_D;
-          end if;
+					
+         end if;
 			
       end if;
 		  

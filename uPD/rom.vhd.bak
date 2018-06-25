@@ -39,14 +39,14 @@ begin
 -- -----------------------------------------------------
                                                         
 -- MAIN:
-    ROM(0) <= "0000100000010000";    -- LDI R0 16
-    ROM(1) <= "0010000000000011";    -- OUT R0 3
-    ROM(2) <= "0000100000001010";    -- LDI R0 10
-    ROM(3) <= "0010000000000100";    -- OUT R0 4
-    ROM(4) <= "0000100000000001";    -- LDI R0 1
-    ROM(5) <= "0010000000000101";    -- OUT R0 5
-    ROM(6) <= "0000100000010011";    -- LDI R0 19
-    ROM(7) <= "0010000000000110";    -- OUT R0 6
+    ROM(0) <= "0000100000000001";    -- LDI R0 1 # Carrega o valor 1 em R0
+    ROM(1) <= "0010000000011000";    -- OUT R0 24 # Escreve o conteúdo de R0 no endereço 24 (i_LE - Enable do registrador)
+    ROM(2) <= "0000100000000010";    -- LDI R0 2 # Carrega o valor 1 em R0
+    ROM(3) <= "0010000000011001";    -- OUT R0 25 # Escreve o conteúdo de R0 no endereço 24 (i_LE - Enable do registrador)
+    ROM(4) <= "0000100000000010";    -- LDI R0 2 # Carrega o valor 1 em R0
+    ROM(5) <= "0010000000011010";    -- OUT R0 26 # Escreve o conteúdo de R0 no endereço 24 (i_LE - Enable do registrador)
+    ROM(6) <= "0000100000000010";    -- LDI R0 2 # Carrega o valor 1 em R0
+    ROM(7) <= "0010000000011011";    -- OUT R0 27 # Escreve o conteúdo de R0 no endereço 24 (i_LE - Enable do registrador)
     ROM(8) <= "0011000000000000";    -- JI MAIN:
    
    

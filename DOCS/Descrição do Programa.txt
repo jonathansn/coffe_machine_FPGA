@@ -1,0 +1,17 @@
+O usuário utiliza as chaves deslizantes para escolher as opções de café
+Quando o usuário ativa alguma chave, o led correspondente aquela opção se acende
+A opção escolhida também é armazenada no registrador CHOICE
+Após realizada a escolha o usuário clica no botão preparar
+O botão preparar inicia uma interrupção INT0
+
+A interrupção INT0 do programa acessa o registrador choice para obter as escolhas do usuário
+Essas escolhas são salvas no registrador R3
+Acessamos a memória para compararmos a escolha do usuário com as quantidades de ingredientes que restam para o preparo
+Se existir algum ingrediente em falta, escrevemos no display MISS (Missing)
+Senão o programa escreve nos displays a palavra WAIT
+Em seguida o programa acessa a memória para obter o tempo necessário total do preparo do café de acordo com as opções selecionadas pelo usuário
+Tendo essa informação o programa escreve este valor no endereço i_TIME e inicia o componente COUNT escrevendo '1' em i_START
+O programa inicia o preparo do café, para simularmos esta tarefa utilizamos esperas de tempo com a instrução NOP
+
+O contador assim que concluir sua contagem, chama a interrupção INT1
+Essa interrupção 

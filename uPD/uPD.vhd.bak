@@ -146,6 +146,9 @@ architecture Behavioral of uPD is
 	signal	w_i_INT  	 	: 		STD_LOGIC_VECTOR(5 DOWNTO 0);
 	signal	w_o_WR_IO		:		STD_LOGIC;
 	signal	w_o_RD_IO		:		STD_LOGIC;
+	
+	signal	w_i_D				: 		STD_LOGIC_VECTOR((p_DATA_WIDTH-1) DOWNTO 0);
+	signal	w_i_LE			:		STD_LOGIC;
 
 -------------------------- END SIGNALS ---------------------------
 	
