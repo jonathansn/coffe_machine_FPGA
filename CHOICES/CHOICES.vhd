@@ -15,7 +15,8 @@ entity CHOICES is
 		 i_LE  		: 	in 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);		-- Load enable
 		 o_Q   		: 	out 	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);		-- Output Switches
 		 o_PREPARE	:	out	STD_LOGIC;													-- Interrupt Prepare
-		 o_LOAD		:	out	STD_LOGIC													-- Interrupt Load
+		 o_LOAD		:	out	STD_LOGIC;													-- Interrupt Load
+		 i_RD			:	in		STD_LOGIC
 	);
 end CHOICES;
 
@@ -30,18 +31,24 @@ begin
 	 
 		if(i_CLR = '1') then
             o_Q <= (OTHERS => '0');
+				o_LOAD <= '0';
+				o_PREPARE <= '0';
 		elsif rising_edge(i_CLK) then
 		
-			if(i_LE = "0000000000000001") then
-			
-				if(i_LOAD = '1') then
-					o_LOAD <= '1';
-				elsif(i_PREPARE = '1') then
-					o_PREPARE <= '1';
-				end if;
-				
-               o_Q <= i_D;
-					
+		if(i_LOAD = '0') then
+			o_LOAD <= '1';
+		else
+			o_LOAD <= '0';
+		end if;
+		
+		if(i_PREPARE = '0') then
+			o_PREPARE <= '1';
+		else
+			o_PREPARE <= '0';
+		end if;
+		
+			if(i_LE = "0000000000000001") then				
+               o_Q <= i_D;					
          end if;
 			
       end if;

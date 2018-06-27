@@ -34,7 +34,8 @@ entity PREPARE is
 		o_DIS2		:	out	STD_LOGIC_VECTOR(6 downto 0);
 		o_DIS3		:	out	STD_LOGIC_VECTOR(6 downto 0);
 		-- WR and RD Control
-		i_WR			:	in		STD_LOGIC
+		i_WR			:	in		STD_LOGIC;
+		i_RD			:	in		STD_LOGIC
 	);
 end PREPARE;
 
@@ -75,7 +76,8 @@ architecture Behavior of PREPARE is
 			i_PREPARE 	: 	in 	STD_LOGIC;
 			i_LOAD		:	in		STD_LOGIC;
 			o_PREPARE 	: 	out 	STD_LOGIC;
-			o_LOAD		:	out	STD_LOGIC
+			o_LOAD		:	out	STD_LOGIC;
+			i_RD			:	in		STD_LOGIC
 		);
 	end component;
 	
@@ -313,7 +315,8 @@ architecture Behavior of PREPARE is
 		i_LOAD				=>		i_LOAD,
 		o_Q					=>		o_DATA,
 		o_PREPARE			=>		o_PREPARE,
-		o_LOAD				=>		o_LOAD
+		o_LOAD				=>		o_LOAD,
+		i_RD					=>		i_RD
 	);
 	
 	-- COUPLER START

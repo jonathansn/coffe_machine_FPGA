@@ -35,6 +35,7 @@ architecture Behavior of COUNTER is
 	signal w_TIME		:	STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
 	signal w_COUNT		:	STD_LOGIC_VECTOR(25 downto 0);						--	count 0 to 10111110101111000010000000 (1 secound in 50 MHz)
 	signal w_SECOUND	:	STD_LOGIC_VECTOR((p_SECOUND_WIDTH-1) downto 0);	-- 0 to 1111 (0 to 15 secounds)
+	signal w_DONE		:	STD_LOGIC;
 	
 	begin
 	
@@ -47,6 +48,7 @@ architecture Behavior of COUNTER is
 				w_COUNT		<= (OTHERS => '0');						--	Reser signal count
 				w_SECOUND	<= (OTHERS => '0');						-- Reset signal secound
 				o_DONE		<=	'0'; 										-- 0 in output
+				w_DONE		<= '0';
 				w_STATE		<= st_IDLE; 								-- Initial state
 				
 			-- CLOCK IN HIGH
@@ -56,10 +58,13 @@ architecture Behavior of COUNTER is
 				
 					--	BEGIN IDLE
 					when st_IDLE =>
-						if(i_START = "0000000000000001")	then
+						if(i_START = "0000000000000001" and w_DONE = '0')	then
 							w_COUNT  	<=	(OTHERS => '0');
 							w_SECOUND 	<= (OTHERS => '0');
 							w_STATE 		<= st_COUNT;
+						elsif(i_START = "0000000000000000")	then
+							w_DONE <= '0';
+							o_DONE <= '0';
 						else
 							w_STATE	<= st_IDLE;
 						end if;
@@ -80,6 +85,7 @@ architecture Behavior of COUNTER is
 					--	BEGIN TIMER
 					when st_TIMER =>
 						if(w_SECOUND = i_TIME) then
+							w_DONE <= '1';
 							o_DONE 	<= '1';								-- Notify done
 							w_COUNT 		<= (OTHERS => '0');
 							w_SECOUND 	<= (OTHERS => '0');

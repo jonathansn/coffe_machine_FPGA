@@ -22,7 +22,7 @@ entity uPD is
 				--o_ADDR_IO   : out STD_LOGIC_VECTOR((p_DATA_WIDTH-8) DOWNTO 0);
 
 				--i_INT		: in  STD_LOGIC_VECTOR(5 DOWNTO 0);
-				--o_BUSY      : out STD_LOGIC;
+				o_BUSY      : out STD_LOGIC;
 			-- BUTTONS and SWITCHES
 			i_PREPARE 	: 	in  STD_LOGIC;
 			i_LOAD		:	in	 STD_LOGIC;
@@ -32,7 +32,7 @@ entity uPD is
 			o_DIS1		:	out		STD_LOGIC_VECTOR(6 downto 0);
 			o_DIS2		:	out		STD_LOGIC_VECTOR(6 downto 0);
 			o_DIS3		:	out		STD_LOGIC_VECTOR(6 downto 0);
-			teste	:	out STD_LOGIC_VECTOR(8 downto 0)
+			o_LED			:	out 		STD_LOGIC_VECTOR(8 downto 0)
     );
 end uPD;
 
@@ -121,7 +121,8 @@ architecture Behavioral of uPD is
 			o_DIS2		:	out	STD_LOGIC_VECTOR(6 downto 0);
 			o_DIS3		:	out	STD_LOGIC_VECTOR(6 downto 0);
 			-- WR and RD Control
-			i_WR			:	in		STD_LOGIC
+			i_WR			:	in		STD_LOGIC;
+			i_RD			:	in		STD_LOGIC
 		);
 	end component;
 
@@ -151,8 +152,6 @@ architecture Behavioral of uPD is
 	
 -----------------------------------------------------------------	
 begin
-
- teste(8 downto 0) <= w_o_DATA_IO(8 downto 0);
 
 	U_PLL : pll PORT MAP (
 		areset	 => w_RST_PLL,
@@ -194,7 +193,7 @@ begin
 					o_ADDR_IO		=> w_o_ADDR_IO,
 				
 					i_INT			=> w_i_INT,
-					o_BUSY      	=> OPEN--o_BUSY
+					o_BUSY      	=> o_BUSY
 	 );
 	 
 	 w_i_INT(5 downto 3) <= (OTHERS => '0');
@@ -217,6 +216,9 @@ begin
 		);
 
 ------------------------------ INSTANCE -------------------------------
+
+	o_LED(4 downto 0) 	<= w_i_DATA_IO(4 downto 0);
+	o_LED(8 downto 5)		<=	w_I_INT(3 downto 0);
 
 	U_PREPARE : PREPARE
 		generic map(
@@ -242,7 +244,8 @@ begin
 			o_DIS1       	=> 	o_DIS1,
 			o_DIS2      	=> 	o_DIS2,
 			o_DIS3       	=> 	o_DIS3,
-			i_WR				=>		w_o_WR_IO
+			i_WR				=>		w_o_WR_IO,
+			i_RD				=>		w_o_RD_IO
 		);
 
 ---------------------------- END INSTANCE -----------------------------
