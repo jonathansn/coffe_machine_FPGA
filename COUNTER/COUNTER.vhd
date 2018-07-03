@@ -58,10 +58,10 @@ architecture Behavior of COUNTER is
 				
 					--	BEGIN IDLE
 					when st_IDLE =>
-						if(i_START = "0000000000000001" and w_DONE = '0')	then
-							w_COUNT  	<=	(OTHERS => '0');
-							w_SECOUND 	<= (OTHERS => '0');
-							w_STATE 		<= st_COUNT;
+						if(i_START = "0000000000000001") then							
+								w_COUNT  	<=	(OTHERS => '0');
+								w_SECOUND 	<= (OTHERS => '0');
+								w_STATE 		<= st_COUNT;
 						elsif(i_START = "0000000000000000")	then
 							w_DONE <= '0';
 							o_DONE <= '0';

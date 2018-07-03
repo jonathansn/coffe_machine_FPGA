@@ -1,7 +1,6 @@
 .PROG
-	SETR RINT 63	# Habilita 3 interrupções
+	SETR RINT 7	# Habilita 3 interrupções
 MAIN:
-	CALL DISPLAY:
 	CALL SUPRIMENTO:	# Carrega suprimento
 	CALL CHOICE1:		# Carrega opções para validação
 	CALL CHOICE2:
@@ -15,36 +14,20 @@ MAIN:
 	CALL CHOICE10:
 	CALL CHOICE11:
 	CALL CHOICE12:
-	LDI R0 1
-	OUT R0 2		# Libera o uso das chaves deslizantes
-	LDI R0 127
-	OUT R0 3
-	LDI R0 127
-	OUT R0 4
-	LDI R0 21
-	OUT R0 5
-	LDI R0 0
-	OUT R0 6
-	JI 25
-DISPLAY:
-	LDI R0 127
-	OUT R0 3
-	LDI R0 127
-	OUT R0 4
-	LDI R0 127
-	OUT R0 5
-	LDI R0 127
-	OUT R0 6
-	RET
+	CALL LECHOICE:
+	CALL OK:
+	JI 16
 SUPRIMENTO:	# Carrega Suprimento: Açúcar, Leite, Chocolate, Café, Água	
-	LDI R0 2
+	LDI R0 1
 	STO R0 1
 	LDI R0 2
 	STO R0 2
-	LDI R0 2
+	LDI R0 1
 	STO R0 3
 	LDI R0 2
 	STO R0 4
+	LDI R0 2
+	STO R0 5
 	RET
 CHOICE1:	# Café puro pequeno sem açúcar	
 	LDI R0 1
@@ -98,16 +81,6 @@ LECHOICE:	# Libera o uso das chaves deslizantes
 	LDI R0 1
 	OUT R0 2
 	RET
-OK:			# Escreve OK
-	LDI R0 127
-	OUT R0 3
-	LDI R0 127
-	OUT R0 4
-	LDI R0 21
-	OUT R0 5
-	LDI R0 0
-	OUT R0 6
-	RET
 PREPARA1:
 	LD R0 4			# Café
 	JZ R0 MISS:		# Se Café = 0 Salta para MISS
@@ -119,12 +92,12 @@ PREPARA1:
 	STO R2 4		# Armazena novo valor
 	LD R0 5			# Água
 	SUB R2 R0 R1	# Subtrai Água
-	STO R2 4		# Armazena novo valor
+	STO R2 5		# Armazena novo valor
 	LDI R0 5		# 5 Segundos
 	OUT R0 1		# Escreve 5 em i_TIME
 	LDI R0 1
 	OUT R0 0		# Escreve 1 em i_START
-	JI 540
+	JI 16
 PREPARA2:
 	LD R0 4			# Café
 	JZ R0 MISS:		# Se Café = 0 Salta para MISS
@@ -138,7 +111,7 @@ PREPARA2:
 	STO R2 4		# Armazena novo valor
 	LD R0 5			# Água
 	SUB R2 R0 R1	# Subtrai Água
-	STO R2 4		# Armazena novo valor
+	STO R2 5		# Armazena novo valor
 	LD R0 1			# Açúcar
 	LDI R1 1		# Carrega 1 para subtrair
 	SUB R2 R0 R1 	# Subtrai Açúcar
@@ -147,7 +120,7 @@ PREPARA2:
 	OUT R0 1		# Escreve 5 em i_TIME
 	LDI R0 1
 	OUT R0 0		# Escreve 1 em i_START
-	JI 540
+	RET
 PREPARA3:
 	LD R0 4			# Café
 	JZ R0 MISS:		# Se Café = 0 Salta para MISS
@@ -159,12 +132,12 @@ PREPARA3:
 	STO R2 4		# Armazena novo valor
 	LD R0 5			# Água
 	SUB R2 R0 R1	# Subtrai Água
-	STO R2 4		# Armazena novo valor
+	STO R2 5		# Armazena novo valor
 	LDI R0 10		# 10 Segundos
 	OUT R0 1		# Escreve 10 em i_TIME
 	LDI R0 1
 	OUT R0 0		# Escreve 1 em i_START
-	JI 540
+	RET
 PREPARA4:
 	LD R0 4			# Café
 	JZ R0 MISS:		# Se Café = 0 Salta para MISS
@@ -178,7 +151,7 @@ PREPARA4:
 	STO R2 4		# Armazena novo valor
 	LD R0 5			# Água
 	SUB R2 R0 R1	# Subtrai Água
-	STO R2 4		# Armazena novo valor
+	STO R2 5		# Armazena novo valor
 	LD R0 1			# Açúcar
 	LDI R1 1		# Carrega 1 para subtrair
 	SUB R2 R0 R1 	# Subtrai Açúcar
@@ -187,7 +160,7 @@ PREPARA4:
 	OUT R0 1		# Escreve 5 em i_TIME
 	LDI R0 1
 	OUT R0 0		# Escreve 1 em i_START
-	JI 540
+	RET
 PREPARA5:
 	LD R0 4			# Café
 	JZ R0 MISS:		# Se Café = 0 Salta para MISS
@@ -204,7 +177,7 @@ PREPARA5:
 	OUT R0 1		# Escreve 5 em i_TIME
 	LDI R0 1
 	OUT R0 0		# Escreve 1 em i_START
-	JI 540
+	RET
 PREPARA6:
 	LD R0 4			# Café
 	JZ R0 MISS:		# Se Café = 0 Salta para MISS
@@ -227,7 +200,7 @@ PREPARA6:
 	OUT R0 1		# Escreve 5 em i_TIME
 	LDI R0 1
 	OUT R0 0		# Escreve 1 em i_START
-	JI 540
+	RET
 PREPARA7:
 	LD R0 4			# Café
 	JZ R0 MISS:		# Se Café = 0 Salta para MISS
@@ -244,7 +217,7 @@ PREPARA7:
 	OUT R0 1		# Escreve 10 em i_TIME
 	LDI R0 1
 	OUT R0 0		# Escreve 1 em i_START
-	JI 540
+	RET
 PREPARA8:
 	LD R0 4			# Café
 	JZ R0 MISS:		# Se Café = 0 Salta para MISS
@@ -267,7 +240,7 @@ PREPARA8:
 	OUT R0 1		# Escreve 10 em i_TIME
 	LDI R0 1
 	OUT R0 0		# Escreve 1 em i_START
-	JI 540
+	RET
 PREPARA9:
 	LD R0 4			# Café
 	JZ R0 MISS:		# Se Café = 0 Salta para MISS
@@ -290,7 +263,7 @@ PREPARA9:
 	OUT R0 1		# Escreve 5 em i_TIME
 	LDI R0 1
 	OUT R0 0		# Escreve 1 em i_START
-	JI 540
+	RET
 PREPARA10:
 	LD R0 4			# Café
 	JZ R0 MISS:		# Se Café = 0 Salta para MISS
@@ -319,7 +292,7 @@ PREPARA10:
 	OUT R0 1		# Escreve 5 em i_TIME
 	LDI R0 1
 	OUT R0 0		# Escreve 1 em i_START
-	JI 540
+	RET
 PREPARA11:
 	LD R0 4			# Café
 	JZ R0 MISS:		# Se Café = 0 Salta para MISS
@@ -342,7 +315,7 @@ PREPARA11:
 	OUT R0 1		# Escreve 10 em i_TIME
 	LDI R0 1
 	OUT R0 0		# Escreve 1 em i_START
-	JI 540
+	RET
 PREPARA12:
 	LD R0 4			# Café
 	JZ R0 MISS:		# Se Café = 0 Salta para MISS
@@ -371,7 +344,17 @@ PREPARA12:
 	OUT R0 1		# Escreve 10 em i_TIME
 	LDI R0 1
 	OUT R0 0		# Escreve 1 em i_START
-	JI 540
+	RET
+OK:			# Escreve OK
+	LDI R0 127
+	OUT R0 3
+	LDI R0 127
+	OUT R0 4
+	LDI R0 21
+	OUT R0 5
+	LDI R0 0
+	OUT R0 6
+	RET
 FAIL:		# Escreve FAIL
 	LDI R0 15	#F
 	OUT R0 6
@@ -404,8 +387,6 @@ UAIT: 		# Escreve MISS (N155)
 	RET
 	
 .INT0		# Interrupção PREPARE
-	LDI R0 1
-	OUT R0 2	  		# Escreve 1 em i_LE (Carrega conteúdo de CHOICE na saída o_DATA)
 	IN R1 2	  			# Lê o conteúdo recebido na entrada i_DATA_IO e armazena em R1
 	LD R0 10	  		# Carrega em R0 o valor contido na RAM no enderço 10 e salta para PREPARA se os registradores forem iguais
 	JE R0 R1 PREPARA1:
@@ -431,14 +412,6 @@ UAIT: 		# Escreve MISS (N155)
 	JE R0 R1 PREPARA11:
 	LD R0 21
 	JE R0 R1 PREPARA12:
-	LDI R0 15	#F
-	OUT R0 6
-	LDI R0 10	#A
-	OUT R0 5
-	LDI R0 1	#I
-	OUT R0 4
-	LDI R0 20	#L
-	OUT R0 3
 	RETI
 	
 .INT1		# Interrupção DONE (Escreve a palavra DONE = '00nE')
@@ -453,14 +426,6 @@ UAIT: 		# Escreve MISS (N155)
 	RETI
 	
 .INT2		# Interrupção LOAD (Carrega todos suprimentos)
-	LDI R0 20	# L
-	OUT R0 6
-	LDI R0 0	# O
-	OUT R0 5
-	LDI R0 10	# A
-	OUT R0 4
-	LDI R0 0	# D
-	OUT R0 3
 	LDI R0 10
 	STO R0 1
 	LDI R0 10
@@ -469,5 +434,15 @@ UAIT: 		# Escreve MISS (N155)
 	STO R0 3
 	LDI R0 10
 	STO R0 4
+	LDI R0 10
+	STO R0 5
+	LDI R0 20	# L
+	OUT R0 6
+	LDI R0 0	# O
+	OUT R0 5
+	LDI R0 10	# A
+	OUT R0 4
+	LDI R0 0	# D
+	OUT R0 3
 	RETI
 .END

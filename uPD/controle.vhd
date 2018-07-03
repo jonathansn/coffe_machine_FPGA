@@ -68,13 +68,14 @@ architecture Behavioral of CONTROLE is
 	signal w_OPCODE		: STD_LOGIC_VECTOR(4 DOWNTO 0);
 	signal w_PC     	: STD_LOGIC_VECTOR((p_DATA_WIDTH-8) DOWNTO 0);
 	signal w_INTERRUPT  : STD_LOGIC;
-	
+	signal w_REG_INT		: STD_LOGIC_VECTOR(5 DOWNTO 0);
 	
 -----------------------------------------------------------------	
 begin
 	
 	w_INTERRUPT <= i_INT(0) OR i_INT(1) OR i_INT(2) OR i_INT(3) OR i_INT(4) OR i_INT(5);
 	
+--	o_REG_INT <= w_REG_INT;
 
 	w_OPCODE  <= i_DATA((p_DATA_WIDTH-1) downto (p_DATA_WIDTH-5));
 	o_ADD_ROM <= w_PC;
@@ -99,6 +100,7 @@ begin
 			v_COMP		:= 0;
 			o_INT_ADD	<= (OTHERS => '0');
 			o_REG_INT	<= (OTHERS => '0');
+			w_REG_INT	<= (OTHERS => '0');
 			w_STATE		<= st_WAIT;				
 			
 		elsif falling_edge (i_CLK) then														
@@ -125,6 +127,8 @@ begin
 							o_PUSH     	<= '1';
 							o_POP 	   	<= '0';
 							o_RET		<= '0';
+							o_REG_INT <= (others => '0');
+									
 							w_STATE 	<= st_CALL_INT;
 						else
 							w_STATE		<= st_DECODE;
@@ -361,6 +365,7 @@ begin
 								o_POP 	   	<= '1';
 								o_RET		<= '0';
 								o_INT_ADD	<= "00";
+								o_REG_INT <= w_REG_INT;									
 								w_STATE 	<= st_RET;					
 								
 							elsif (w_OPCODE = SETR) then
@@ -375,7 +380,9 @@ begin
 								o_RET		<= '0';					
 
 								if (i_DATA(10 downto 9) = "00") then 	-- REG_INT.
+									w_REG_INT <= i_DATA(5 downto 0);
 									o_REG_INT <= i_DATA(5 downto 0);
+									
 								end if;
 								w_STATE 	<= st_EXECUTE;
 								

@@ -17,10 +17,17 @@ entity INTERRUPCAO is
 end INTERRUPCAO;
 
 architecture Behavioral of INTERRUPCAO is
+
+	-- STATE MACHINE
+	type ST is (st_INACTIVE, st_ACTIVE);
+	attribute syn_encoding	:	string;
+	attribute syn_encoding	of	ST	:	type is "safe";
+
 	signal w_INT	: STD_LOGIC_VECTOR(5 DOWNTO 0);
 	
 	
 begin
+
 
 	w_INT <= i_INT;
 	
@@ -47,4 +54,3 @@ begin
 	end process;	
 
 end behavioral;
-	
